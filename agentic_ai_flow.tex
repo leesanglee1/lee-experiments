@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=2cm,
+    agent/.style={rectangle, draw, fill=green!20, minimum width=2.5cm, minimum height=1cm},
+    storage/.style={cylinder, draw, shape border rotate=90, fill=purple!20, minimum width=1.5cm, minimum height=1cm},
+    output/.style={rectangle, draw, fill=red!20, minimum width=2cm, minimum height=0.8cm},
+    human/.style={circle, draw, fill=yellow!20, minimum size=1.2cm}
+]
+
+% Main AI Agents
+\node[agent] (agent1) at (0,4) {AI Orchestrator};
+\node[agent] (agent2) at (-3,2) {Language Model Agent};
+\node[agent] (agent3) at (0,2) {Task Processing Agent};
+\node[agent] (agent4) at (3,2) {Output Generation Agent};
+
+% Storage and Output
+\node[storage] (db) at (0,0) {Knowledge Base};
+\node[output] (output) at (3,0) {Final Output};
+
+% Human Input
+\node[human] (human) at (-3,4) {Human Input};
+
+% Connections
+\draw[->, thick] (agent1) -- node[right] {Task} (agent2);
+\draw[->, thick] (agent1) -- node[right] {Assignment} (agent3);
+\draw[->, thick] (agent1) -- node[right] {Request} (agent4);
+
+\draw[->, thick] (agent2) -- node[above] {Processing} (agent3);
+\draw[->, thick] (agent3) -- node[above] {Data} (agent4);
+
+% Feedback loops
+\draw[->, thick, purple] (agent4) to[bend right] node[right] {Quality Check} (agent3);
+\draw[->, thick, purple] (agent3) to[bend right] node[left] {Validation} (agent2);
+
+% Database interactions
+\draw[->, thick, blue] (db) -- (agent2);
+\draw[->, thick, blue] (db) -- (agent3);
+\draw[->, thick, blue] (agent4) -- (db);
+
+% Final output and human feedback
+\draw[->, thick] (agent4) -- (output);
+\draw[->, thick] (human) -- (agent1);
+\draw[->, thick, purple] (output) to[bend right=45] node[below] {Feedback} (human);
+
+\end{tikzpicture}
+\end{center}
+
+\end{document}
